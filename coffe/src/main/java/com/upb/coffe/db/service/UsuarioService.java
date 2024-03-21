@@ -15,4 +15,6 @@ public interface UsuarioService {
     Long findByUsernameAndPassword(String nombreUsuario, String password);
 
     List<UsuarioDto> findAllUsers();
+
+    Long deleteUsuario(Long id);
 }

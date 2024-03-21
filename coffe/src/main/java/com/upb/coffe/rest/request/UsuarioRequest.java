@@ -10,7 +10,6 @@ import lombok.*;
 public class UsuarioRequest {
 
     private String nombreUsuario;
-
     private String password;
 
 

@@ -19,7 +19,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Slf4j
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
@@ -81,6 +81,24 @@ public class UsuarioController {
             log.info("Usuario no encontrado, message {}", e.getMessage());
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("mensaje", "Usuario con id " + usuarioNuevo.getId() + " no encontrado");
+            responseBody.put("status", HttpStatus.NOT_FOUND.value() + " " + HttpStatus.NOT_FOUND.getReasonPhrase());
+
+            return ResponseEntity.badRequest().body(responseBody);
+        } catch (Exception e) {
+            log.info("Error inesperado {}", e);
+            return ResponseEntity.badRequest().body("Error inesperado");
+        }
+    }
+
+    @PutMapping("/delete-user")
+    ResponseEntity<?> deleteUsuario(@RequestBody Long id) {
+        try {
+            log.info("Eliminar usuario con id: {}", id);
+            return ok(usuarioService.deleteUsuario(id));
+        } catch (NoSuchElementException e) {
+            log.info("Usuario no encontrado, message {}", e.getMessage());
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("mensaje", "Usuario con id " + id + " no encontrado");
             responseBody.put("status", HttpStatus.NOT_FOUND.value() + " " + HttpStatus.NOT_FOUND.getReasonPhrase());
 
             return ResponseEntity.badRequest().body(responseBody);
