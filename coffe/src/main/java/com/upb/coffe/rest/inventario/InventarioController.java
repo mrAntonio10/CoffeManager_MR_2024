@@ -6,6 +6,7 @@ import com.upb.coffe.db.service.InventarioService;
 import com.upb.coffe.db.service.UsuarioService;
 import com.upb.coffe.db.service.VentaService;
 import com.upb.coffe.rest.request.UsuarioRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,14 +21,13 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/inventarios")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class InventarioController {
+
     private final InventarioService inventarioService;
 
-    public InventarioController(InventarioService inventarioService) {
-        this.inventarioService = inventarioService;
-    }
 
 
     @GetMapping("/find-all")

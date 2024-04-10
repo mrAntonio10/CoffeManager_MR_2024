@@ -4,10 +4,8 @@ package com.upb.coffe.db.service.impl;
 import com.upb.coffe.db.model.usuario.Usuario;
 import com.upb.coffe.db.model.usuario.dto.UsuarioDto;
 import com.upb.coffe.db.repository.usuario.UsuarioRepository;
-import com.upb.coffe.db.service.JwtService;
 import com.upb.coffe.db.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,12 +17,9 @@ import java.util.*;
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder encoder;
-    private final JwtService jwtTokenService;
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,
-                              JwtService jwtService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.encoder = new BCryptPasswordEncoder(10);;
-        this.jwtTokenService = jwtService;
     }
 
     @Override

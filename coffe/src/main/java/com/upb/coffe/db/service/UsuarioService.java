@@ -18,4 +18,5 @@ public interface UsuarioService {
     List<UsuarioDto> findAllUsers();
 
     Long deleteUsuario(Long id);
+
 }
