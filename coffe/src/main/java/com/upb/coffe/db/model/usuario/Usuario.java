@@ -34,6 +34,9 @@ public class Usuario implements Serializable {
     @Column(name = "APELLIDO")
     private String apellido;
 
+    @Column(name = "KONG_CONSUMER")
+    private String consumer;
+
     @Enumerated(EnumType.STRING)
     @Column(name="rol")
     private Roles rol;
@@ -44,5 +47,7 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     @Column(name = "USUARIO_ORDEN")
     private List<Orden> orden;
+
+
 
 }

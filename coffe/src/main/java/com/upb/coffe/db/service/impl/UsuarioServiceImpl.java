@@ -4,6 +4,7 @@ package com.upb.coffe.db.service.impl;
 import com.upb.coffe.db.model.usuario.Usuario;
 import com.upb.coffe.db.model.usuario.dto.UsuarioDto;
 import com.upb.coffe.db.repository.usuario.UsuarioRepository;
+import com.upb.coffe.db.service.JwtService;
 import com.upb.coffe.db.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +12,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder encoder;
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    private final JwtService jwtTokenService;
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,
+                              JwtService jwtService) {
         this.usuarioRepository = usuarioRepository;
         this.encoder = new BCryptPasswordEncoder(10);;
+        this.jwtTokenService = jwtService;
     }
 
     @Override
@@ -60,9 +61,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Long findByUsernameAndPassword(String nombreUsuario, String password) {
+    public HashMap<String, Object> findByUsernameAndPassword(String nombreUsuario, String password) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByNombreAndEstadoFalse(nombreUsuario);
 
+        log.info("[{}]", usuarioOpt);
         if(!usuarioOpt.isPresent()){
             throw new NoSuchElementException("Las credenciales no pertenecen a un usuario dentro del sistema");
         }
@@ -70,7 +72,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(!encoder.matches(password, usuarioOpt.get().getPassword())) {
             throw new NoSuchElementException("Las credenciales no pertenecen a un usuario dentro del sistema");
         }
-        return usuarioOpt.get().getId();
+        HashMap<String, Object> resp =  new HashMap<>();
+            resp.put("consumer",usuarioOpt.get().getConsumer() );
+
+        return resp;
     }
 
     @Override

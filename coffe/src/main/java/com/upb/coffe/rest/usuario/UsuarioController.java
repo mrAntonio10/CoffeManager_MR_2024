@@ -2,7 +2,9 @@ package com.upb.coffe.rest.usuario;
 
 
 import com.upb.coffe.db.model.usuario.Usuario;
+import com.upb.coffe.db.service.JwtService;
 import com.upb.coffe.db.service.UsuarioService;
+import com.upb.coffe.rest.request.JwtRequest;
 import com.upb.coffe.rest.request.UsuarioRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import static org.springframework.http.ResponseEntity.ok;
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
+    @Autowired
+    JwtService jwtService;
 
 
     @GetMapping("/find-all-users")
@@ -105,6 +109,24 @@ public class UsuarioController {
         } catch (Exception e) {
             log.info("Error inesperado {}", e);
             return ResponseEntity.badRequest().body("Error inesperado");
+        }
+    }
+
+
+
+    @PostMapping("/jwt")
+    ResponseEntity<?> getBearer(@RequestBody JwtRequest req) {
+        try {
+            return ok(jwtService.generateToken(req.getUserId(), req.getSecret()));
+        }catch (Exception e){
+            log.info("Error inesperado {}", e);
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("mensaje", "Error al guardar usuario");
+            responseBody.put("status", HttpStatus.CONFLICT.value() + " " + HttpStatus.CONFLICT.getReasonPhrase());
+            responseBody.put("catch", e);
+
+            return ResponseEntity.badRequest().body(responseBody);
         }
     }
 }

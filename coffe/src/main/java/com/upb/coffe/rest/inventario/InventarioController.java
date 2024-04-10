@@ -60,7 +60,7 @@ public class InventarioController {
     }
 
     @PutMapping("/delete-inventory")
-    ResponseEntity<?> deleteUsuario(@RequestBody Long id) {
+    ResponseEntity<?> deleteInventario(@RequestBody Long id) {
         try {
             log.info("Eliminar inventario con id: {}", id);
             return ok(inventarioService.deleteInventario(id));
