@@ -22,16 +22,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8084"}, allowCredentials = "true", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-
-
-    @GetMapping("SALUDO")
-    public ResponseEntity<String> sayHello() {
-        log.info("entraste a saludo wacho");
-        return ok("holaaaaaaaaa");
-    }
 
     @GetMapping("/find-all-users")
     public ResponseEntity<?> usuarioFindAll(){

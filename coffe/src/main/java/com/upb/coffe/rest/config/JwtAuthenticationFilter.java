@@ -33,29 +33,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("Se filtra algo");
-        if (request.getServletPath().contains("/api/v1/auth")) {
+        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/csrf/token")) {
+            log.info("auth o csrf");
             filterChain.doFilter(request, response);
             return;
         }
 
         final String authHeader = request.getHeader("Authorization");
+        final String csrfHeader = request.getHeader("X-CSRF-TOKEN");
+
         final String jwt;
         final String username;
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.info("no hay xd");
+        if(authHeader == null || !authHeader.startsWith("Bearer ") || csrfHeader != null ) {
             filterChain.doFilter(request, response);
             return;
         }
-        log.info("pasa el jtw");
         jwt = authHeader.substring(7); //Bearer y el espacio son 7 posiciones
             username = jwtService.extractUsername(jwt);
-            log.info("extrae user [{}]", username);
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails usuario = this.userDetailsService.loadUserByUsername(username);
 
-            log.info("pasa el bean userdetailservice {}");
 
             if(jwtService.isTokenValid(jwt, usuario)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -65,11 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.info("El toquen fue valido chicossss");
             }
-            log.info("fuera1");
         }
-        log.info("fuera2 [{}], [{}]", request.getServletPath(), response.getStatus());
         filterChain.doFilter(request, response);
     }
 }

@@ -1,6 +1,7 @@
 package com.upb.coffe.rest.inventario;
 
 import com.upb.coffe.db.model.inventario.Inventario;
+import com.upb.coffe.db.model.inventario.dto.InventarioDtoForSelect;
 import com.upb.coffe.db.model.usuario.Usuario;
 import com.upb.coffe.db.service.InventarioService;
 import com.upb.coffe.db.service.UsuarioService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -23,7 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/inventarios")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8084"}, allowCredentials = "true", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class InventarioController {
 
     private final InventarioService inventarioService;
@@ -31,10 +33,25 @@ public class InventarioController {
 
 
     @GetMapping("/find-all")
-    public ResponseEntity<?> inventarioFindAll(){
+    public ResponseEntity<?> inventarioFindAll() {
         try{
             log .info("Solicitud lista de inventario");
             return ok(inventarioService.findAllByEstadoFalse());
+        }
+        catch (Exception e){
+            log.info("Error inesperado {}", e);
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("mensaje", "Error al listar inventario");
+            return ResponseEntity.badRequest().body(responseBody);
+        }
+    }
+
+    @GetMapping("/select")
+    public ResponseEntity<?> inventarioFindForSelect() {
+        try{
+            log .info("Solicitud lista de inventario");
+            return ok(inventarioService.findAllDtoByEstadoFalse());
         }
         catch (Exception e){
             log.info("Error inesperado {}", e);
@@ -60,7 +77,7 @@ public class InventarioController {
     }
 
     @PutMapping("/delete-inventory")
-    ResponseEntity<?> deleteInventario(@RequestBody Long id) {
+    ResponseEntity<?> deleteInventario(@RequestBody Short id) {
         try {
             log.info("Eliminar inventario con id: {}", id);
             return ok(inventarioService.deleteInventario(id));

@@ -2,10 +2,12 @@ package com.upb.coffe.db.repository.usuario;
 
 
 import com.upb.coffe.db.model.usuario.Usuario;
+import com.upb.coffe.db.model.usuario.dto.UsuarioDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -18,5 +20,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             " WHERE u.estado = false AND " +
             " u.nombreUsuario = :nombreUsuario ")
     Optional<Usuario> findByNombreAndEstadoFalse(@Param("nombreUsuario") String nombreUsuario);
+
+    @Query(" SELECT u FROM Usuario u " +
+            " WHERE u.estado = false "
+    )
+    List<Usuario> findAllAndEstadoFalse();
 
 }

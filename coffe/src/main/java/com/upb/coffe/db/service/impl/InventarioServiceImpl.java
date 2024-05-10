@@ -2,6 +2,7 @@ package com.upb.coffe.db.service.impl;
 
 
 import com.upb.coffe.db.model.inventario.Inventario;
+import com.upb.coffe.db.model.inventario.dto.InventarioDtoForSelect;
 import com.upb.coffe.db.model.usuario.Usuario;
 import com.upb.coffe.db.repository.inventario.InventarioRepository;
 import com.upb.coffe.db.repository.usuario.UsuarioRepository;
@@ -31,7 +32,12 @@ public class InventarioServiceImpl implements InventarioService {
     }
 
     @Override
-    public Long save(@RequestBody Inventario inventario) {
+    public List<InventarioDtoForSelect> findAllDtoByEstadoFalse() {
+        return inventarioRepository.findAllDtoByEstadoFalseOrderByIdAsc();
+    }
+
+    @Override
+    public Short save(@RequestBody Inventario inventario) {
         Optional<Inventario> invOpt = this.inventarioRepository.findById(inventario.getId());
 
         if (invOpt.isPresent()) {
@@ -55,7 +61,7 @@ public class InventarioServiceImpl implements InventarioService {
     }
 
     @Override
-    public Long deleteInventario(Long id) {
+    public Short deleteInventario(Short id) {
         Optional<Inventario> inventarioOpt = this.inventarioRepository.findById(id);
         if(!inventarioOpt.isPresent()) {
             throw new NoSuchElementException("inventario con id: " + id + "no encontrado");

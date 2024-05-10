@@ -4,6 +4,8 @@ import com.upb.coffe.db.model.orden.Orden;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "VENTA")
+@EntityListeners(value = { AuditingEntityListener.class} )
 public class Venta implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_VENTA_ID_GENERATOR", sequenceName = "SEQ_VENTA_ID", allocationSize = 1)
@@ -25,6 +28,7 @@ public class Venta implements Serializable {
     private Orden orden;
 
     @Column(name = "FECHA_VENTA")
+    @CreatedDate
     private Date fechaVenta;
 
 }

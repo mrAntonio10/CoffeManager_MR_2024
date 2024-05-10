@@ -1,5 +1,6 @@
 package com.upb.coffe.db.model.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.upb.coffe.db.model.orden.Orden;
 import com.upb.coffe.db.model.usuario.enums.Roles;
 import lombok.Data;
@@ -47,6 +48,7 @@ public class Usuario implements Serializable, UserDetails {
     @Column(name = "ESTADO")
     private Boolean estado;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     @Column(name = "USUARIO_ORDEN")
     private List<Orden> orden;

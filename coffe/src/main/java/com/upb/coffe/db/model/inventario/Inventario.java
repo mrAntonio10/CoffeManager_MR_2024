@@ -16,7 +16,7 @@ public class Inventario implements Serializable {
     @SequenceGenerator(name = "SEQ_INVENTARIO_ID_GENERATOR", sequenceName = "SEQ_INVENTARIO_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVENTARIO_ID_GENERATOR")
     @Column(name = "ID")
-    private Long id;
+    private Short id;
 
     @Column(name = "NOMBRE")
     private String nombre;

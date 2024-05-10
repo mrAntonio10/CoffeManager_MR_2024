@@ -74,21 +74,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UsuarioDto> findAllUsers() {
-        List<Usuario> userList = usuarioRepository.findAll();
+        List<Usuario> userList = usuarioRepository.findAllAndEstadoFalse();
+        log.info("USUARIOS {}", userList);
         List<UsuarioDto> resp = new ArrayList<>();
 
-        for (Usuario usr: userList) {
-            UsuarioDto dto = UsuarioDto.builder()
-                    .id(usr.getId())
-                    .nombreUsuario(usr.getNombreUsuario())
-                    .nombreCompleto(usr.getNombre() +" "+ usr.getApellido())
-                    .rol(usr.getRol().toString())
-                    .estado(usr.getEstado())
-                    .build();
+        Iterator<Usuario> iterator = userList.iterator();
 
-            resp.add(dto);
+        log.info("aaaaa");
+        while(iterator.hasNext()) {
+            log.info("ingreso al it");
+            UsuarioDto u = new UsuarioDto(iterator.next());
+            log.info("agregando {}", u);
+            resp.add(u);
         }
+
+        log.info("ultimo {}", resp);
         return resp;
     }
 
