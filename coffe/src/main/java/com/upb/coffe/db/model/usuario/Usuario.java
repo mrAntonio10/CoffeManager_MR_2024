@@ -26,13 +26,13 @@ public class Usuario implements Serializable, UserDetails {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "NOMBRE_USUARIO")
+    @Column(name = "NOMBRE_USUARIO", nullable = false)
     private String nombreUsuario;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "NOMBRE", nullable = false)
     private String nombre;
 
     @Column(name = "APELLIDO")
@@ -42,7 +42,7 @@ public class Usuario implements Serializable, UserDetails {
     private String consumer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="rol")
+    @Column(name="rol", nullable = false)
     private Roles rol;
 
     @Column(name = "ESTADO")
